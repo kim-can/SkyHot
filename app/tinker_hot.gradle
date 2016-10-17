@@ -1,6 +1,17 @@
-
 def apkPath = file("${buildDir}/apk/")
 
+//如果没用git
+def gitCode() {
+    try {
+        String gitRev = 'git rev-parse --short HEAD'.execute().text.trim()
+        if (gitRev == null) {
+            throw new GradleException("can't get git rev, you should add git to system path or just input test value, such as 'testTinkerId'")
+        }
+        return gitRev
+    } catch (Exception e) {
+        throw new GradleException("can't get git rev, you should add git to system path or just input test value, such as 'testTinkerId'")
+    }
+}
 
 ext {
     //for some reason, you may want to ignore tinkerBuild, such as instant run debug build?
@@ -14,8 +25,28 @@ ext {
     tinkerApplyResourcePath = "${apkPath}/app-release-1017-13-52-04-R.txt"
 }
 
+def getOldApkPath() {
+    return project.hasProperty("SKY_OLD_APK") ? "${apkPath}/${SKY_OLD_APK}" : project.ext.tinkerOldApkPath
+}
 
-if (ext.tinkerEnabled) {
+def getApplyMappingPath() {
+    return project.hasProperty("SKY_APPLY_MAPPING") ? "${apkPath}/${SKY_APPLY_MAPPING}" : project.ext.tinkerApplyMappingPath
+}
+
+def getApplyResourceMappingPath() {
+    return project.hasProperty("SKY_APPLY_RESOURCE") ? "${apkPath}/${SKY_APPLY_RESOURCE}" : project.ext.tinkerApplyResourcePath
+}
+
+def getTinkerIdValue() {
+    return project.hasProperty("SKY_TINKER_ID") ? SKY_TINKER_ID : gitCode()
+}
+
+def buildWithTinker() {
+    return project.hasProperty("SKY_TINKER_ENABLE") ? SKY_TINKER_ENABLE : project.ext.tinkerEnabled
+}
+
+
+if (buildWithTinker()) {
     apply plugin: 'com.tencent.tinker.patch'
 
     tinkerPatch {
@@ -24,7 +55,7 @@ if (ext.tinkerEnabled) {
          * the old apk path, use to diff with the new apk to build
          * add apk from the build/bakApk
          */
-        oldApk = project.ext.tinkerOldApkPath
+        oldApk = getOldApkPath()
         /**
          * optional，default 'false'
          * there are some cases we may get some warnings
@@ -60,12 +91,12 @@ if (ext.tinkerEnabled) {
              * Warning:
              * you must be careful that it will affect the normal assemble build!
              */
-            applyMapping = project.ext.tinkerApplyMappingPath
+            applyMapping = getApplyMappingPath()
             /**
              * optional，default 'null'
              * It is nice to keep the resource id from R.txt file to reduce java changes
              */
-            applyResourceMapping = project.ext.tinkerApplyResourcePath
+            applyResourceMapping = getApplyResourceMappingPath()
 
             /**
              * necessary，default 'null'
@@ -74,7 +105,7 @@ if (ext.tinkerEnabled) {
              * we can use git rev, svn rev or simply versionCode.
              * we will gen the tinkerId in your manifest automatic
              */
-            tinkerId = rootProject.hasProperty("versionName")
+            tinkerId = getTinkerIdValue()
         }
 
         dex {
@@ -191,28 +222,30 @@ if (ext.tinkerEnabled) {
          * task type, you want to bak
          */
         def taskName = variant.name
+        def versionName = variant.versionName
 
         tasks.all {
             if ("assemble${taskName.capitalize()}".equalsIgnoreCase(it.name)) {
                 it.doLast {
                     copy {
                         def date = new Date().format("MMdd-HH-mm-ss")
+
                         from "${buildDir}/outputs/apk/${project.getName()}-${taskName}.apk"
                         into apkPath
                         rename { String fileName ->
-                            fileName.replace("${project.getName()}-${taskName}.apk", "${project.getName()}-${taskName}-${date}.apk")
+                            fileName.replace("${project.getName()}-${taskName}.apk", "${project.getName()}-${taskName}-${versionName}-${date}.apk")
                         }
 
                         from "${buildDir}/outputs/mapping/${taskName}/mapping.txt"
                         into apkPath
                         rename { String fileName ->
-                            fileName.replace("mapping.txt", "${project.getName()}-${taskName}-${date}-mapping.txt")
+                            fileName.replace("mapping.txt", "${project.getName()}-${taskName}-${versionName}-${date}-mapping.txt")
                         }
 
                         from "${buildDir}/intermediates/symbols/${taskName}/R.txt"
                         into apkPath
                         rename { String fileName ->
-                            fileName.replace("R.txt", "${project.getName()}-${taskName}-${date}-R.txt")
+                            fileName.replace("R.txt", "${project.getName()}-${taskName}-${versionName}-${date}-R.txt")
                         }
                     }
                 }
