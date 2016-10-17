@@ -26,15 +26,15 @@ ext {
 }
 
 def getOldApkPath() {
-    return project.hasProperty("SKY_OLD_APK") ? "${apkPath}/${SKY_OLD_APK}" : project.ext.tinkerOldApkPath
+    return project.hasProperty("SKY_OLD_APK") ? "${apkPath}/" + SKY_OLD_APK : project.ext.tinkerOldApkPath
 }
 
 def getApplyMappingPath() {
-    return project.hasProperty("SKY_APPLY_MAPPING") ? "${apkPath}/${SKY_APPLY_MAPPING}" : project.ext.tinkerApplyMappingPath
+    return project.hasProperty("SKY_APPLY_MAPPING") ? "${apkPath}/" + SKY_APPLY_MAPPING : project.ext.tinkerApplyMappingPath
 }
 
 def getApplyResourceMappingPath() {
-    return project.hasProperty("SKY_APPLY_RESOURCE") ? "${apkPath}/${SKY_APPLY_RESOURCE}" : project.ext.tinkerApplyResourcePath
+    return project.hasProperty("SKY_APPLY_RESOURCE") ? "${apkPath}/" + SKY_APPLY_RESOURCE : project.ext.tinkerApplyResourcePath
 }
 
 def getTinkerIdValue() {
