@@ -1,0 +1,82 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.3"
+    defaultConfig {
+        applicationId "sky.skyhot"
+        minSdkVersion 14
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0.0"
+
+        multiDexEnabled true
+
+        multiDexKeepProguard file("proguard/keep_in_main_dex.pro")
+    }
+
+    //recommend
+    dexOptions {
+        jumboMode = true
+    }
+
+    signingConfigs {
+        release {
+            try {
+                storeFile file("./keystore/release.keystore")
+                storePassword "testres"
+                keyAlias "testres"
+                keyPassword "testres"
+            } catch (ex) {
+                throw new InvalidUserDataException(ex.toString())
+            }
+        }
+
+        debug {
+            storeFile file("./keystore/debug.keystore")
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            signingConfig signingConfigs.release
+
+            //混淆文件
+            proguardFile("proguard/proguard-app.pro")
+            proguardFile("proguard/proguard-sky.pro")
+            proguardFile("proguard/proguard-support-v7.pro")
+            proguardFile("proguard/proguard-tinker.pro")
+            proguardFiles getDefaultProguardFile('proguard-android.txt')
+        }
+        debug {
+            debuggable true
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+}
+
+apply from: 'tinker_hot.gradle'
+
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.github.skyJinc:sky:2.2'
+    // 控件注册
+    apt 'com.jakewharton:butterknife-compiler:8.2.1'
+
+    // tinker 依赖
+    compile('com.tencent.tinker:tinker-android-anno:1.6.2')
+    compile('com.tencent.tinker:tinker-android-lib:1.6.2')
+
+    compile "com.android.support:multidex:1.0.1"
+
+}
