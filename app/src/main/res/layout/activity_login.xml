@@ -74,7 +74,10 @@
                 tools:text="内容"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-
+            <TextView
+                tools:text="哈哈哈哈哈"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
             <Button
                 android:id="@+id/btn_change"
                 style="?android:textAppearanceSmall"

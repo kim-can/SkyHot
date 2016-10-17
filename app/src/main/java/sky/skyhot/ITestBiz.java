@@ -29,8 +29,8 @@ public interface ITestBiz extends SKYIBiz {
 class TestBiz extends SKYBiz<ITestActivity> implements ITestBiz {
 
 	@Override public void update() {
-		SKYHelper.toast().show("修复");
-		ui().setContent("修复");
+		SKYHelper.toast().show("修复asdfasdfasdfasdf");
+		ui().setContent("修复asdfasdfsa");
 
 	}
 
