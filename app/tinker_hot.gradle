@@ -254,30 +254,27 @@ if (project.ext.tinkerEnabled) {
          */
         def taskName = variant.name
         def versionName = variant.versionName
-        def isYes = file("${apkPath}/${versionName}")
         tasks.all {
             if ("assemble${taskName.capitalize()}".equalsIgnoreCase(it.name)) {
                 it.doLast {
-                    if(isYes == null){
-                        copy {
+                    copy {
 
-                            from "${buildDir}/outputs/apk/${project.getName()}-${taskName}.apk"
-                            into "${apkPath}/${versionName}/"
-                            rename { String fileName ->
-                                fileName.replace("${project.getName()}-${taskName}.apk", "${project.getName()}-${taskName}-${versionName}.apk")
-                            }
+                        from "${buildDir}/outputs/apk/${project.getName()}-${taskName}.apk"
+                        into "${apkPath}/${versionName}/"
+                        rename { String fileName ->
+                            fileName.replace("${project.getName()}-${taskName}.apk", "${project.getName()}-${taskName}-${versionName}.apk")
+                        }
 
-                            from "${buildDir}/outputs/mapping/${taskName}/mapping.txt"
-                            into "${apkPath}/${versionName}/"
-                            rename { String fileName ->
-                                fileName.replace("mapping.txt", "${project.getName()}-${taskName}-${versionName}-mapping.txt")
-                            }
+                        from "${buildDir}/outputs/mapping/${taskName}/mapping.txt"
+                        into "${apkPath}/${versionName}/"
+                        rename { String fileName ->
+                            fileName.replace("mapping.txt", "${project.getName()}-${taskName}-${versionName}-mapping.txt")
+                        }
 
-                            from "${buildDir}/intermediates/symbols/${taskName}/R.txt"
-                            into "${apkPath}/${versionName}/"
-                            rename { String fileName ->
-                                fileName.replace("R.txt", "${project.getName()}-${taskName}-${versionName}-R.txt")
-                            }
+                        from "${buildDir}/intermediates/symbols/${taskName}/R.txt"
+                        into "${apkPath}/${versionName}/"
+                        rename { String fileName ->
+                            fileName.replace("R.txt", "${project.getName()}-${taskName}-${versionName}-R.txt")
                         }
                     }
 
