@@ -1,5 +1,3 @@
-def apkPath = file("${buildDir}/apk/")
-
 //如果没用git
 def gitCode() {
     try {
@@ -7,7 +5,7 @@ def gitCode() {
         if (gitRev == null) {
             throw new GradleException("can't get git rev, you should add git to system path or just input test value, such as 'testTinkerId'")
         }
-        return "111"+"11"
+        return gitRev
     } catch (Exception e) {
         throw new GradleException("can't get git rev, you should add git to system path or just input test value, such as 'testTinkerId'")
     }
@@ -16,6 +14,9 @@ def gitCode() {
 ext {
     //for some reason, you may want to ignore tinkerBuild, such as instant run debug build?
     tinkerEnabled = true
+
+    tinkerbuildDir = file("${buildDir}/apk/")
+
     //you should bak the following files
     //old apk file to build patch apk
     tinkerOldApkPath = "${apkPath}/app-release-1017-13-52-04.apk"
@@ -32,7 +33,7 @@ def getOldApkPath() {
             if (apk == null) {
                 throw new GradleException("有BUG包不能为空")
             }
-            return ${apkPath} + apk
+            return project.ext.tinkerbuildDir + apk
         }
     }
     return project.ext.tinkerOldApkPath
@@ -45,7 +46,7 @@ def getApplyMappingPath() {
             if (mapping == null) {
                 throw new GradleException("有BUG包的映射文件不能为空")
             }
-            return ${apkPath} + mapping
+            return project.ext.tinkerbuildDir + mapping
         }
     }
     return project.ext.tinkerApplyMappingPath
@@ -58,7 +59,7 @@ def getApplyResourceMappingPath() {
             if (res == null) {
                 throw new GradleException("有BUG包的资源文件不能为空")
             }
-            return ${apkPath} + res
+            return project.ext.tinkerbuildDir + res
         }
     }
     return project.ext.tinkerApplyResourcePath
