@@ -1,7 +1,6 @@
 #-applymapping "old apk mapping here"
 
--keepattributes *Annotation* 
--dontwarn com.tencent.tinker.anno.AnnotationProcessor 
+-dontwarn com.tencent.tinker.anno.AnnotationProcessor
 -keep @com.tencent.tinker.anno.DefaultLifeCycle public class *
 -keep public class * extends android.app.Application {
     *;
@@ -27,4 +26,4 @@
 
 #your dex.loader pattern here
 -keep class com.tencent.tinker.loader.*
--keep class tinker.sample.android.app.SampleApplication
+-keep class sky.skyhot.AppApplication
