@@ -32,7 +32,7 @@ def getOldApkPath() {
             if (apk == null) {
                 throw new GradleException("有BUG包不能为空")
             }
-            return apkPath + apk
+            return "${apkPath}/" + apk
         }
     }
     return project.ext.tinkerOldApkPath
@@ -45,7 +45,7 @@ def getApplyMappingPath() {
             if (mapping == null) {
                 throw new GradleException("有BUG包的映射文件不能为空")
             }
-            return apkPath + mapping
+            return "${apkPath}/" + mapping
         }
     }
     return project.ext.tinkerApplyMappingPath
@@ -58,7 +58,7 @@ def getApplyResourceMappingPath() {
             if (res == null) {
                 throw new GradleException("有BUG包的资源文件不能为空")
             }
-            return apkPath + res
+            return "${apkPath}/" + res
         }
     }
     return project.ext.tinkerApplyResourcePath
