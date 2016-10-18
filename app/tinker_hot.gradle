@@ -18,11 +18,11 @@ ext {
     tinkerEnabled = true
     //you should bak the following files
     //old apk file to build patch apk
-    tinkerOldApkPath = "${apkPath}/app-release-1017-13-52-04.apk"
+    tinkerOldApkPath = "${apkPath}/app-release-1.0.0-1018-16-34-37.apk"
     //proguard mapping file to build patch apk
-    tinkerApplyMappingPath = "${apkPath}/app-release-1017-13-52-04-mapping.txt"
+    tinkerApplyMappingPath = "${apkPath}/app-release-1.0.0-1018-16-34-37-mapping.txt"
     //resource R.txt to build patch apk, must input if there is resource changed
-    tinkerApplyResourcePath = "${apkPath}/app-release-1017-13-52-04-R.txt"
+    tinkerApplyResourcePath = "${apkPath}/app-release-1.0.0-1018-16-34-37-R.txt"
 }
 
 def getOldApkPath() {
@@ -33,7 +33,7 @@ def getOldApkPath() {
             if (apk == null) {
                 throw new GradleException("有BUG包不能为空")
             }
-            return path + apk
+            return "${path}/${apk}"
         }
     }
     return project.ext.tinkerOldApkPath
@@ -47,7 +47,7 @@ def getApplyMappingPath() {
             if (mapping == null) {
                 throw new GradleException("有BUG包的映射文件不能为空")
             }
-            return path + mapping
+            return "${path}/${mapping}"
         }
     }
     return project.ext.tinkerApplyMappingPath
@@ -61,7 +61,7 @@ def getApplyResourceMappingPath() {
             if (res == null) {
                 throw new GradleException("有BUG包的资源文件不能为空")
             }
-            return path + res
+            return "${path}/${res}"
         }
     }
     return project.ext.tinkerApplyResourcePath
