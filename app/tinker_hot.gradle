@@ -29,10 +29,11 @@ def getOldApkPath() {
     if (project.hasProperty("SKY_OLD_APK")) {
         if (!project.property("SKY_OLD_APK").equals("0")) {
             def apk = project.property("SKY_OLD_APK")
+            def path = file("${buildDir}/apk/")
             if (apk == null) {
                 throw new GradleException("有BUG包不能为空")
             }
-            return "${apkPath}/" + apk
+            return path + apk
         }
     }
     return project.ext.tinkerOldApkPath
@@ -42,10 +43,11 @@ def getApplyMappingPath() {
     if (project.hasProperty("SKY_APPLY_MAPPING")) {
         if (!project.property("SKY_APPLY_MAPPING").equals("0")) {
             def mapping = project.property("SKY_APPLY_MAPPING")
+            def path = file("${buildDir}/apk/")
             if (mapping == null) {
                 throw new GradleException("有BUG包的映射文件不能为空")
             }
-            return "${apkPath}/" + mapping
+            return path + mapping
         }
     }
     return project.ext.tinkerApplyMappingPath
@@ -55,10 +57,11 @@ def getApplyResourceMappingPath() {
     if (project.hasProperty("SKY_APPLY_RESOURCE")) {
         if (!project.property("SKY_APPLY_RESOURCE").equals("0")) {
             def res = project.property("SKY_APPLY_RESOURCE")
+            def path = file("${buildDir}/apk/")
             if (res == null) {
                 throw new GradleException("有BUG包的资源文件不能为空")
             }
-            return "${apkPath}/" + res
+            return path + res
         }
     }
     return project.ext.tinkerApplyResourcePath
