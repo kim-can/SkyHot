@@ -45,7 +45,7 @@ public class TestActivity extends SKYActivity<ITestBiz> implements ITestActivity
 	 * 登陆
 	 */
 	@OnClick(R.id.email_sign_in_button) public void login() {
-		biz().update();
+		biz().updateBug();
 	}
 
 	/**

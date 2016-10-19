@@ -24,6 +24,8 @@ public interface ITestBiz extends SKYIBiz {
 
 	void change();
 
+	void updateBug();
+
 }
 
 class TestBiz extends SKYBiz<ITestActivity> implements ITestBiz {
@@ -43,5 +45,10 @@ class TestBiz extends SKYBiz<ITestActivity> implements ITestBiz {
 		} else {
 			SKYHelper.toast().show("没有文件");
 		}
+	}
+
+	@Override public void updateBug() {
+		SKYHelper.toast().show("修复BUG");
+		ui().setContent("修复哦耶");
 	}
 }
