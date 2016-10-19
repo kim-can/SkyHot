@@ -48,7 +48,7 @@ class TestBiz extends SKYBiz<ITestActivity> implements ITestBiz {
 	}
 
 	@Override public void updateBug() {
-		SKYHelper.toast().show("修复BUG");
-		ui().setContent("修复哦耶");
+		SKYHelper.toast().show("我是已经修复了的啊撒旦发射点发撒旦");
+		ui().setContent("我是已经修复了的啊撒旦发射点发撒旦");
 	}
 }

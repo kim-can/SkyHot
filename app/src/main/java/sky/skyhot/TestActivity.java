@@ -38,7 +38,7 @@ public class TestActivity extends SKYActivity<ITestBiz> implements ITestActivity
 	}
 
 	@Override protected void initData(Bundle bundle) {
-		tvContent.setText("bug");
+		tvContent.setText("修复");
 	}
 
 	/**
