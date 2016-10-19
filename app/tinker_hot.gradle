@@ -1,4 +1,15 @@
-def apkPath = file("${rootDir}/app/skyapp/")
+
+def getPatchApk() {
+    return project.hasProperty("SKY_PATH_APK")
+}
+
+def getPatchMapping() {
+    return project.hasProperty("SKY_PATH_MAPPING")
+}
+
+def getPatchR() {
+    return project.hasProperty("SKY_PATH_R")
+}
 
 //如果没用git
 def gitCode() {
@@ -18,62 +29,11 @@ ext {
     tinkerEnabled = true
     //you should bak the following files
     //old apk file to build patch apk
-    tinkerOldApkPath = "${apkPath}/app-release-1.0.0-1018-17-03-28.apk"
+    tinkerOldApkPath = getPatchApk()
     //proguard mapping file to build patch apk
-    tinkerApplyMappingPath = "${apkPath}/app-release-1.0.0-1018-17-03-28-mapping.txt"
+    tinkerApplyMappingPath = getPatchMapping()
     //resource R.txt to build patch apk, must input if there is resource changed
-    tinkerApplyResourcePath = "${apkPath}/app-release-1.0.0-1018-17-03-28-R.txt"
-}
-
-def getOldApkPath() {
-    if (project.hasProperty("SKY_OLD_APK")) {
-        if (!project.property("SKY_OLD_APK").equals("0")) {
-            def apk = project.property("SKY_OLD_APK")
-            def path = file("${rootDir}/app/skyapp/")
-            if (apk == null) {
-                throw new GradleException("有BUG包不能为空")
-            }
-            return "${path}/${apk}"
-        }
-    }
-    return project.ext.tinkerOldApkPath
-}
-
-def getApplyMappingPath() {
-    if (project.hasProperty("SKY_APPLY_MAPPING")) {
-        if (!project.property("SKY_APPLY_MAPPING").equals("0")) {
-            def mapping = project.property("SKY_APPLY_MAPPING")
-            def path = file("${rootDir}/app/skyapp/")
-            if (mapping == null) {
-                throw new GradleException("有BUG包的映射文件不能为空")
-            }
-            return "${path}/${mapping}"
-        }
-    }
-    return project.ext.tinkerApplyMappingPath
-}
-
-def getApplyResourceMappingPath() {
-    if (project.hasProperty("SKY_APPLY_RESOURCE")) {
-        if (!project.property("SKY_APPLY_RESOURCE").equals("0")) {
-            def res = project.property("SKY_APPLY_RESOURCE")
-            def path = file("${rootDir}/app/skyapp/")
-            if (res == null) {
-                throw new GradleException("有BUG包的资源文件不能为空")
-            }
-            return "${path}/${res}"
-        }
-    }
-    return project.ext.tinkerApplyResourcePath
-}
-
-def getTinkerIdValue() {
-    if (project.hasProperty("SKY_TINKER_ID")) {
-        if (!project.property("SKY_TINKER_ID").equals("0")) {
-            return project.property("SKY_TINKER_ID")
-        }
-    }
-    return gitCode()
+    tinkerApplyResourcePath = getPatchR()
 }
 
 
@@ -86,7 +46,7 @@ if (project.ext.tinkerEnabled) {
          * the old apk path, use to diff with the new apk to build
          * add apk from the build/bakApk
          */
-        oldApk = getOldApkPath()
+        oldApk = project.ext.tinkerOldApkPath
         /**
          * optional，default 'false'
          * there are some cases we may get some warnings
@@ -122,12 +82,12 @@ if (project.ext.tinkerEnabled) {
              * Warning:
              * you must be careful that it will affect the normal assemble build!
              */
-            applyMapping = getApplyMappingPath()
+            applyMapping = project.ext.tinkerApplyMappingPath
             /**
              * optional，default 'null'
              * It is nice to keep the resource id from R.txt file to reduce java changes
              */
-            applyResourceMapping = getApplyResourceMappingPath()
+            applyResourceMapping = project.ext.tinkerApplyResourcePath
 
             /**
              * necessary，default 'null'
@@ -136,7 +96,7 @@ if (project.ext.tinkerEnabled) {
              * we can use git rev, svn rev or simply versionCode.
              * we will gen the tinkerId in your manifest automatic
              */
-            tinkerId = getTinkerIdValue()
+            tinkerId = gitCode()
         }
 
         dex {
@@ -257,26 +217,6 @@ if (project.ext.tinkerEnabled) {
         tasks.all {
             if ("assemble${taskName.capitalize()}".equalsIgnoreCase(it.name)) {
                 it.doLast {
-                    copy {
-
-                        from "${buildDir}/outputs/apk/${project.getName()}-${taskName}.apk"
-                        into "${apkPath}/${versionName}/"
-                        rename { String fileName ->
-                            fileName.replace("${project.getName()}-${taskName}.apk", "${project.getName()}-${taskName}-${versionName}.apk")
-                        }
-
-                        from "${buildDir}/outputs/mapping/${taskName}/mapping.txt"
-                        into "${apkPath}/${versionName}/"
-                        rename { String fileName ->
-                            fileName.replace("mapping.txt", "${project.getName()}-${taskName}-${versionName}-mapping.txt")
-                        }
-
-                        from "${buildDir}/intermediates/symbols/${taskName}/R.txt"
-                        into "${apkPath}/${versionName}/"
-                        rename { String fileName ->
-                            fileName.replace("R.txt", "${project.getName()}-${taskName}-${versionName}-R.txt")
-                        }
-                    }
 
                     copy {
 
