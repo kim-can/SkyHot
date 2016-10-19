@@ -1,17 +1,36 @@
-
+//Jenkins配置
+//补丁APK路径
 def getPatchApk() {
     return "${rootDir}/path.apk"
 }
 
+//补丁Mapping路径
 def getPatchMapping() {
     return "${rootDir}/path_mapping.txt"
 }
 
+//布丁R文件路径
 def getPatchR() {
     return "${rootDir}/path_R.txt"
 }
 
-//如果没用git
+// 自行测试配置
+////补丁APK路径
+//def getPatchApk() {
+//    return "${buildDir}/app/app-release-1.0.1.apk"
+//}
+//
+////补丁Mapping路径
+//def getPatchMapping() {
+//    return "${buildDir}/app/app-release-1.0.1-mapping.txt"
+//}
+//
+////布丁R文件路径
+//def getPatchR() {
+//    return "${buildDir}/app/app-release-1.0.1-R.txt"
+//}
+
+//如果没用git，返回值随意
 def gitCode() {
     try {
         String gitRev = 'git rev-parse --short HEAD'.execute().text.trim()
@@ -217,9 +236,7 @@ if (project.ext.tinkerEnabled) {
         tasks.all {
             if ("assemble${taskName.capitalize()}".equalsIgnoreCase(it.name)) {
                 it.doLast {
-
                     copy {
-
                         from "${buildDir}/outputs/apk/${project.getName()}-${taskName}.apk"
                         into "${buildDir}/app/"
                         rename { String fileName ->

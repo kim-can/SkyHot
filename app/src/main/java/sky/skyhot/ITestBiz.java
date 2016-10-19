@@ -41,7 +41,7 @@ class TestBiz extends SKYBiz<ITestActivity> implements ITestBiz {
 		L.i(file.getAbsolutePath());
 		if (file.exists()) {
 			SKYHelper.toast().show("修复BUG");
-			TinkerInstaller.onReceiveUpgradePatch(SKYHelper.getInstance(), Environment.getExternalStorageDirectory().getAbsolutePath() + "/patch_signed_7zip.apk");
+			TinkerInstaller.onReceiveUpgradePatch(SKYHelper.getInstance(), file.getAbsolutePath());
 		} else {
 			SKYHelper.toast().show("没有文件");
 		}
