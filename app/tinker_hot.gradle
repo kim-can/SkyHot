@@ -1,14 +1,14 @@
 
 def getPatchApk() {
-    return "${rootDir}/SKY_PATH_APK"
+    return "${rootDir}/path.apk"
 }
 
 def getPatchMapping() {
-    return "${rootDir}/SKY_PATH_MAPPING"
+    return "${rootDir}/path_mapping.txt"
 }
 
 def getPatchR() {
-    return "${rootDir}/SKY_PATH_R"
+    return "${rootDir}/path_R.txt"
 }
 
 //如果没用git
