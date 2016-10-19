@@ -1,14 +1,14 @@
 
 def getPatchApk() {
-    return project.hasProperty("SKY_PATH_APK")
+    return "${rootDir}/SKY_PATH_APK"
 }
 
 def getPatchMapping() {
-    return project.hasProperty("SKY_PATH_MAPPING")
+    return "${rootDir}/SKY_PATH_MAPPING"
 }
 
 def getPatchR() {
-    return project.hasProperty("SKY_PATH_R")
+    return "${rootDir}/SKY_PATH_R"
 }
 
 //如果没用git
